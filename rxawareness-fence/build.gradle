@@ -5,7 +5,7 @@ group='com.github.ivianuu'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
 
 
     defaultConfig {
@@ -27,13 +27,13 @@ android {
 
 dependencies {
     // Awareness
-    compile 'com.google.android.gms:play-services-awareness:11.0.2'
+    compile 'com.google.android.gms:play-services-awareness:11.0.4'
 
     // RxJava
-    compile "io.reactivex.rxjava2:rxjava:2.1.0"
+    compile "io.reactivex.rxjava2:rxjava:2.1.1"
 
     // RxPlayServices
-    compile 'com.github.IVIanuu:RxPlayServices:1450dd3b7b'
+    compile 'com.github.IVIanuu:RxPlayServices:8ebd7f13b7'
 
     // Compile libs
     implementation fileTree(dir: 'libs', include: ['*.jar'])
