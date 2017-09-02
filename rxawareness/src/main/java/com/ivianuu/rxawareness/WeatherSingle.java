@@ -17,6 +17,8 @@
 package com.ivianuu.rxawareness;
 
 import android.content.Context;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 
 import com.google.android.gms.awareness.Awareness;
@@ -38,7 +40,8 @@ class WeatherSingle extends BaseAwarenessSingle<Weather, WeatherResult> {
     }
 
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
-    public static Single<Weather> create(Context context) {
+    @CheckResult @NonNull
+    static Single<Weather> create(Context context) {
         return Single.create(new WeatherSingle(context));
     }
 

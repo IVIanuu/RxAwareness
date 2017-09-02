@@ -18,6 +18,8 @@ package com.ivianuu.rxawareness;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.RequiresPermission;
 
@@ -53,13 +55,15 @@ class BeaconSingle extends BaseAwarenessSingle<List<BeaconState.BeaconInfo>, Bea
 
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static Single<List<BeaconState.BeaconInfo>> create(Context context, BeaconState.TypeFilter... typeFilters) {
+    @CheckResult @NonNull
+    static Single<List<BeaconState.BeaconInfo>> create(Context context, BeaconState.TypeFilter... typeFilters) {
         return Single.create(new BeaconSingle(context, typeFilters));
     }
 
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static Single<List<BeaconState.BeaconInfo>> create(Context context, Collection<BeaconState.TypeFilter> typeFilters) {
+    @CheckResult @NonNull
+    static Single<List<BeaconState.BeaconInfo>> create(Context context, Collection<BeaconState.TypeFilter> typeFilters) {
         return Single.create(new BeaconSingle(context, typeFilters));
     }
 

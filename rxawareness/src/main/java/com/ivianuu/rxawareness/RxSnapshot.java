@@ -20,6 +20,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.os.Build;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.RequiresPermission;
 
@@ -55,7 +57,7 @@ public class RxSnapshot {
 
     private final Context context;
 
-    private RxSnapshot(Context context) {
+    private RxSnapshot(@NonNull Context context) {
         this.context = context;
     }
 
@@ -64,7 +66,8 @@ public class RxSnapshot {
      * @param context context to use, will default to your application context
      * @return instance of ReactiveSnapshot
      */
-    public static RxSnapshot create(Context context) {
+    @NonNull
+    public static RxSnapshot create(@NonNull Context context) {
         return new RxSnapshot(context.getApplicationContext());
     }
 
@@ -74,6 +77,7 @@ public class RxSnapshot {
      * @return Single event of weather information
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<Weather> getWeather() {
         guardWithApiKey(context, API_KEY_AWARENESS_API);
         return WeatherSingle.create(context);
@@ -86,6 +90,7 @@ public class RxSnapshot {
      * @return Single event of the current temperature
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<Float> getTemperature(final int temperatureUnit) {
         return getWeather()
                 .map(new Function<Weather, Float>() {
@@ -103,6 +108,7 @@ public class RxSnapshot {
      * @return Single event of the current feels-like temperature
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<Float> getFeelsLikeTemperature(final int temperatureUnit) {
         return getWeather()
                 .map(new Function<Weather, Float>() {
@@ -120,6 +126,7 @@ public class RxSnapshot {
      * @return Single event of the current dew point
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<Float> getDewPoint(final int temperatureUnit) {
         return getWeather()
                 .map(new Function<Weather, Float>() {
@@ -136,6 +143,7 @@ public class RxSnapshot {
      * @return Single event of the current humidity
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<Integer> getHumidity() {
         return getWeather()
                 .map(new Function<Weather, Integer>() {
@@ -152,6 +160,7 @@ public class RxSnapshot {
      * @return Single event of the current weather conditions
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<List<Integer>> getWeatherConditions() {
         return getWeather()
                 .map(new Function<Weather, Integer[]>() {
@@ -180,6 +189,7 @@ public class RxSnapshot {
      * @return Single event of the current location
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<Location> getLocation() {
         guardWithApiKey(context, API_KEY_AWARENESS_API);
         return LocationSingle.create(context);
@@ -191,6 +201,7 @@ public class RxSnapshot {
      * @return Single event of the current latitude/longitude
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<LatLng> getLatLng() {
         return getLocation()
                 .map(new Function<Location, LatLng>() {
@@ -207,6 +218,7 @@ public class RxSnapshot {
      * @return Single event of the current speed
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<Float> getSpeed() {
         return getLocation()
                 .map(new Function<Location, Float>() {
@@ -223,6 +235,7 @@ public class RxSnapshot {
      * @return Single event of the current devices activity
      */
     @RequiresPermission("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
+    @CheckResult @NonNull
     public Single<ActivityRecognitionResult> getActivity() {
         guardWithApiKey(context, API_KEY_AWARENESS_API);
         return ActivitySingle.create(context);
@@ -234,6 +247,7 @@ public class RxSnapshot {
      * @return Single event of the most probable activity
      */
     @RequiresPermission("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
+    @CheckResult @NonNull
     public Single<DetectedActivity> getMostProbableActivity() {
         return getActivity()
                 .map(new Function<ActivityRecognitionResult, DetectedActivity>() {
@@ -254,6 +268,7 @@ public class RxSnapshot {
      * @return Single event of the most probable activity
      */
     @RequiresPermission("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
+    @CheckResult @NonNull
     public Single<DetectedActivity> getMostProbableActivity(final int minimumProbability) {
         return getActivity()
                 .map(new Function<ActivityRecognitionResult, DetectedActivity>() {
@@ -274,6 +289,7 @@ public class RxSnapshot {
      * @return Single event of the most probable activities
      */
     @RequiresPermission("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
+    @CheckResult @NonNull
     public Single<List<DetectedActivity>> getProbableActivities() {
         return getActivity()
                 .map(new Function<ActivityRecognitionResult, List<DetectedActivity>>() {
@@ -293,6 +309,7 @@ public class RxSnapshot {
      * @return Single event of the most probable activities
      */
     @RequiresPermission("com.google.android.gms.permission.ACTIVITY_RECOGNITION")
+    @CheckResult @NonNull
     public Single<List<DetectedActivity>> getProbableActivities(final int minimumProbability) {
         return getActivity()
                 .map(new Function<ActivityRecognitionResult, List<DetectedActivity>>() {
@@ -317,6 +334,7 @@ public class RxSnapshot {
      *
      * @return Single event of {@code true} if the headphones are currently plugged in
      */
+    @CheckResult @NonNull
     public Single<Boolean> headphonesPluggedIn() {
         guardWithApiKey(context, API_KEY_AWARENESS_API);
         return HeadphoneSingle.create(context);
@@ -328,6 +346,7 @@ public class RxSnapshot {
      * @return Single event of the currently nearby places
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
+    @CheckResult @NonNull
     public Single<List<PlaceLikelihood>> getNearbyPlaces() {
         guardWithApiKey(context, API_KEY_AWARENESS_API);
         guardWithApiKey(context, API_KEY_PLACES_API);
@@ -342,7 +361,8 @@ public class RxSnapshot {
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public Single<List<BeaconState.BeaconInfo>> getBeacons(BeaconState.TypeFilter... typeFilters) {
+    @CheckResult @NonNull
+    public Single<List<BeaconState.BeaconInfo>> getBeacons(@NonNull BeaconState.TypeFilter... typeFilters) {
         guardWithApiKey(context, API_KEY_AWARENESS_API);
         guardWithApiKey(context, API_KEY_BEACON_API);
         return BeaconSingle.create(context, typeFilters);
@@ -356,7 +376,8 @@ public class RxSnapshot {
      */
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public Single<List<BeaconState.BeaconInfo>> getBeacons(Collection<BeaconState.TypeFilter> typeFilters) {
+    @CheckResult @NonNull
+    public Single<List<BeaconState.BeaconInfo>> getBeacons(@NonNull Collection<BeaconState.TypeFilter> typeFilters) {
         guardWithApiKey(context, API_KEY_AWARENESS_API);
         guardWithApiKey(context, API_KEY_BEACON_API);
         return BeaconSingle.create(context, typeFilters);

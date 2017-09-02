@@ -17,6 +17,7 @@
 package com.ivianuu.rxawareness;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.awareness.Awareness;
 import com.google.android.gms.common.api.Result;
@@ -26,7 +27,8 @@ import com.ivianuu.rxplayservices.GoogleApiClientRequestSingle;
  * Base Single for Awareness Requests in a GoogleApiClient
  */
 abstract class BaseAwarenessSingle<T, R extends Result> extends GoogleApiClientRequestSingle<T, R> {
-    BaseAwarenessSingle(Context context) {
+
+    BaseAwarenessSingle(@NonNull Context context) {
         super(context, Awareness.API);
     }
 }

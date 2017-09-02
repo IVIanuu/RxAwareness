@@ -17,6 +17,8 @@
 package com.ivianuu.rxawareness;
 
 import android.content.Context;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.awareness.Awareness;
 import com.google.android.gms.awareness.snapshot.HeadphoneStateResult;
@@ -35,7 +37,8 @@ class HeadphoneSingle extends BaseAwarenessSingle<Boolean, HeadphoneStateResult>
         super(context);
     }
 
-    public static Single<Boolean> create(Context context) {
+    @CheckResult @NonNull
+    static Single<Boolean> create(@NonNull Context context) {
         return Single.create(new HeadphoneSingle(context));
     }
 

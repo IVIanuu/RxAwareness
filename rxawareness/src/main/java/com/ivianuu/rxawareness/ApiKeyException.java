@@ -20,11 +20,7 @@ package com.ivianuu.rxawareness;
  * Exception thrown when API Keys for ReactiveAwareness are missing
  */
 public class ApiKeyException extends RuntimeException {
-    public ApiKeyException(String message) {
+    ApiKeyException(String message) {
         super(message);
-    }
-
-    public ApiKeyException(String message, Throwable cause) {
-        super(message, cause);
     }
 }

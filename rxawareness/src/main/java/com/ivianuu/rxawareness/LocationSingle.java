@@ -18,6 +18,8 @@ package com.ivianuu.rxawareness;
 
 import android.content.Context;
 import android.location.Location;
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 
 import com.google.android.gms.awareness.Awareness;
@@ -37,7 +39,8 @@ class LocationSingle extends BaseAwarenessSingle<Location, LocationResult> {
     }
 
     @RequiresPermission("android.permission.ACCESS_FINE_LOCATION")
-    public static Single<Location> create(Context context) {
+    @CheckResult @NonNull
+    static Single<Location> create(@NonNull Context context) {
         return Single.create(new LocationSingle(context));
     }
 

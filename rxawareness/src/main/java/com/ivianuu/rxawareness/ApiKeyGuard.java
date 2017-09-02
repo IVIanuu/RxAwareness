@@ -37,9 +37,8 @@ class ApiKeyGuard {
      *
      * @param context context to use
      * @param key     key to check for
-     * @throws ApiKeyException
      */
-    public static void guardWithApiKey(Context context, String key) {
+    static void guardWithApiKey(Context context, String key) {
         if (!hasApiKey(context, key)) {
             throw new ApiKeyException(key + " not found in AndroidManifest.xml. Please visit https://developers.google.com/awareness/android-api/get-started for more details.");
         }
