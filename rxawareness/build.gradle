@@ -22,13 +22,13 @@ android {
 
 dependencies {
     // Awareness
-    api 'com.google.android.gms:play-services-awareness:11.2.2'
+    compile 'com.google.android.gms:play-services-awareness:11.2.2'
 
     // RxJava
-    api "io.reactivex.rxjava2:rxjava:2.1.2"
+    compile "io.reactivex.rxjava2:rxjava:2.1.2"
 
     // RxPlayServices
-    api 'com.github.IVIanuu:RxPlayServices:a9af8b9a9d'
+    compile 'com.github.IVIanuu:RxPlayServices:a9af8b9a9d'
 }
 
 // build a jar with source files
