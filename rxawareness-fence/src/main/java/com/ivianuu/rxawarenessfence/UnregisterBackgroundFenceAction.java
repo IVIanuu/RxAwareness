@@ -39,17 +39,7 @@ class UnregisterBackgroundFenceAction {
 
     private UnregisterBackgroundFenceAction(Context context, String name) {
         this.name = name;
-        RxPlayServices.actions(context, Awareness.API, new Consumer<GoogleApiClient>() {
-            @Override
-            public void accept(GoogleApiClient client) throws Exception {
-                onClientConnected(client);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                onClientError(throwable);
-            }
-        });
+        RxPlayServices.actions(context, Awareness.API, this::onClientConnected, this::onClientError);
     }
 
     /**
@@ -68,14 +58,11 @@ class UnregisterBackgroundFenceAction {
                 .build();
 
         Awareness.FenceApi.updateFences(googleApiClient, fenceRequest)
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        if (!status.isSuccess()) {
-                            onClientError(new ClientException("Unable to unregister fence. " + status.getStatusMessage()));
-                        }
-                        googleApiClient.disconnect();
+                .setResultCallback(status -> {
+                    if (!status.isSuccess()) {
+                        onClientError(new ClientException("Unable to unregister fence. " + status.getStatusMessage()));
                     }
+                    googleApiClient.disconnect();
                 });
     }
 

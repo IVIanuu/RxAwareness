@@ -13,17 +13,22 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     // Awareness
-    compile 'com.google.android.gms:play-services-awareness:11.2.0'
+    api 'com.google.android.gms:play-services-awareness:11.2.2'
 
     // RxJava
-    compile "io.reactivex.rxjava2:rxjava:2.1.2"
+    api "io.reactivex.rxjava2:rxjava:2.1.2"
 
     // RxPlayServices
-    compile 'com.github.IVIanuu:RxPlayServices:1.0.0'
+    api 'com.github.IVIanuu:RxPlayServices:a9af8b9a9d'
 }
 
 // build a jar with source files

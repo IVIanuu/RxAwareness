@@ -93,12 +93,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<Float> getTemperature(final int temperatureUnit) {
         return getWeather()
-                .map(new Function<Weather, Float>() {
-                    @Override
-                    public Float apply(Weather weather) throws Exception {
-                        return weather.getTemperature(temperatureUnit);
-                    }
-                });
+                .map(weather -> weather.getTemperature(temperatureUnit));
     }
 
     /**
@@ -111,12 +106,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<Float> getFeelsLikeTemperature(final int temperatureUnit) {
         return getWeather()
-                .map(new Function<Weather, Float>() {
-                    @Override
-                    public Float apply(Weather weather) throws Exception {
-                        return weather.getFeelsLikeTemperature(temperatureUnit);
-                    }
-                });
+                .map(weather -> weather.getFeelsLikeTemperature(temperatureUnit));
     }
 
     /**
@@ -129,12 +119,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<Float> getDewPoint(final int temperatureUnit) {
         return getWeather()
-                .map(new Function<Weather, Float>() {
-                    @Override
-                    public Float apply(Weather weather) throws Exception {
-                        return weather.getDewPoint(temperatureUnit);
-                    }
-                });
+                .map(weather -> weather.getDewPoint(temperatureUnit));
     }
 
     /**
@@ -146,12 +131,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<Integer> getHumidity() {
         return getWeather()
-                .map(new Function<Weather, Integer>() {
-                    @Override
-                    public Integer apply(Weather weather) throws Exception {
-                        return weather.getHumidity();
-                    }
-                });
+                .map(Weather::getHumidity);
     }
 
     /**
@@ -163,23 +143,17 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<List<Integer>> getWeatherConditions() {
         return getWeather()
-                .map(new Function<Weather, Integer[]>() {
-                    @Override
-                    public Integer[] apply(Weather weather) throws Exception {
-                        Integer[] conditions = new Integer[]{};
-                        for (int i = 0; i < weather.getConditions().length; i++) {
-                            conditions[i] = weather.getConditions()[i];
-                        }
-                        return conditions;
+                .map(weather -> {
+                    Integer[] conditions = new Integer[]{};
+                    for (int i = 0; i < weather.getConditions().length; i++) {
+                        conditions[i] = weather.getConditions()[i];
                     }
+                    return conditions;
                 })
-                .map(new Function<Integer[], List<Integer>>() {
-                    @Override
-                    public List<Integer> apply(Integer[] conditions) throws Exception {
-                        List<Integer> list = new ArrayList<>(conditions.length);
-                        list.addAll(Arrays.asList(conditions));
-                        return list;
-                    }
+                .map(conditions -> {
+                    List<Integer> list = new ArrayList<>(conditions.length);
+                    list.addAll(Arrays.asList(conditions));
+                    return list;
                 });
     }
 
@@ -204,12 +178,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<LatLng> getLatLng() {
         return getLocation()
-                .map(new Function<Location, LatLng>() {
-                    @Override
-                    public LatLng apply(Location location) throws Exception {
-                        return new LatLng(location.getLatitude(), location.getLongitude());
-                    }
-                });
+                .map(location -> new LatLng(location.getLatitude(), location.getLongitude()));
     }
 
     /**
@@ -221,12 +190,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<Float> getSpeed() {
         return getLocation()
-                .map(new Function<Location, Float>() {
-                    @Override
-                    public Float apply(Location location) throws Exception {
-                        return location.getSpeed();
-                    }
-                });
+                .map(Location::getSpeed);
     }
 
     /**
@@ -250,12 +214,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<DetectedActivity> getMostProbableActivity() {
         return getActivity()
-                .map(new Function<ActivityRecognitionResult, DetectedActivity>() {
-                    @Override
-                    public DetectedActivity apply(ActivityRecognitionResult activityRecognitionResult) throws Exception {
-                        return activityRecognitionResult.getMostProbableActivity();
-                    }
-                });
+                .map(ActivityRecognitionResult::getMostProbableActivity);
     }
 
     /**
@@ -271,15 +230,12 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<DetectedActivity> getMostProbableActivity(final int minimumProbability) {
         return getActivity()
-                .map(new Function<ActivityRecognitionResult, DetectedActivity>() {
-                    @Override
-                    public DetectedActivity apply(ActivityRecognitionResult activity) throws Exception {
-                        DetectedActivity mostProbableActivity = activity.getMostProbableActivity();
-                        if (activity.getActivityConfidence(mostProbableActivity.getType()) < minimumProbability) {
-                            return null;
-                        }
-                        return mostProbableActivity;
+                .map(activity -> {
+                    DetectedActivity mostProbableActivity = activity.getMostProbableActivity();
+                    if (activity.getActivityConfidence(mostProbableActivity.getType()) < minimumProbability) {
+                        return null;
                     }
+                    return mostProbableActivity;
                 });
     }
 
@@ -292,12 +248,7 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<List<DetectedActivity>> getProbableActivities() {
         return getActivity()
-                .map(new Function<ActivityRecognitionResult, List<DetectedActivity>>() {
-                    @Override
-                    public List<DetectedActivity> apply(ActivityRecognitionResult activity) throws Exception {
-                        return activity.getProbableActivities();
-                    }
-                });
+                .map(ActivityRecognitionResult::getProbableActivities);
     }
 
     /**
@@ -312,20 +263,17 @@ public class RxSnapshot {
     @CheckResult @NonNull
     public Single<List<DetectedActivity>> getProbableActivities(final int minimumProbability) {
         return getActivity()
-                .map(new Function<ActivityRecognitionResult, List<DetectedActivity>>() {
-                    @Override
-                    public List<DetectedActivity> apply(ActivityRecognitionResult activity) throws Exception {
-                        List<DetectedActivity> probableActivities = activity.getProbableActivities();
-                        List<DetectedActivity> matchingActivities = new ArrayList<>(probableActivities.size());
+                .map(activity -> {
+                    List<DetectedActivity> probableActivities = activity.getProbableActivities();
+                    List<DetectedActivity> matchingActivities = new ArrayList<>(probableActivities.size());
 
-                        for (DetectedActivity probableActivity : probableActivities) {
-                            if (activity.getActivityConfidence(probableActivity.getType()) >= minimumProbability) {
-                                matchingActivities.add(probableActivity);
-                            }
+                    for (DetectedActivity probableActivity : probableActivities) {
+                        if (activity.getActivityConfidence(probableActivity.getType()) >= minimumProbability) {
+                            matchingActivities.add(probableActivity);
                         }
-
-                        return matchingActivities;
                     }
+
+                    return matchingActivities;
                 });
     }
 

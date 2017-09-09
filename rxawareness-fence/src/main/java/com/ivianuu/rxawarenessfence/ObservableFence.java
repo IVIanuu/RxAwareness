@@ -76,12 +76,7 @@ public class ObservableFence implements ObservableOnSubscribe<Boolean> {
      */
     public static Observable<Boolean> create(final Context context, final AwarenessFence fence) {
         return RxPlayServices.observable(context.getApplicationContext(), Awareness.API)
-                .flatMap(new Function<GoogleApiClient, ObservableSource<Boolean>>() {
-                    @Override
-                    public ObservableSource<Boolean> apply(GoogleApiClient client) throws Exception {
-                        return Observable.create(new ObservableFence(context, client, fence));
-                    }
-                });
+                .flatMap(client -> Observable.create(new ObservableFence(context, client, fence)));
     }
 
     @Override
@@ -103,22 +98,16 @@ public class ObservableFence implements ObservableOnSubscribe<Boolean> {
                 .build();
 
         Awareness.FenceApi.updateFences(googleApiClient, fenceUpdateRequest)
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        if (!status.isSuccess()) {
-                            emitter.onError(new ClientException("Error adding observable fence. " + status.getStatusMessage()));
-                        }
-                        emitter.onComplete();
+                .setResultCallback(status -> {
+                    if (!status.isSuccess()) {
+                        emitter.onError(new ClientException("Error adding observable fence. " + status.getStatusMessage()));
                     }
+                    emitter.onComplete();
                 });
 
-        emitter.setCancellable(new Cancellable() {
-            @Override
-            public void cancel() throws Exception {
-                context.unregisterReceiver(receiver);
-                unregisterFenceRequest(googleApiClient, emitter);
-            }
+        emitter.setCancellable(() -> {
+            context.unregisterReceiver(receiver);
+            unregisterFenceRequest(googleApiClient, emitter);
         });
     }
 
@@ -129,18 +118,15 @@ public class ObservableFence implements ObservableOnSubscribe<Boolean> {
                 .build();
 
         Awareness.FenceApi.updateFences(googleApiClient, fenceUpdateRequest)
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        if (!status.isSuccess()) {
-                            emitter.onError(new ClientException("Error removing observable fence. " + status.getStatusMessage()));
-                        }
-
-                        if (googleApiClient.isConnecting() || googleApiClient.isConnected()) {
-                            googleApiClient.disconnect();
-                        }
-                        emitter.onComplete();
+                .setResultCallback(status -> {
+                    if (!status.isSuccess()) {
+                        emitter.onError(new ClientException("Error removing observable fence. " + status.getStatusMessage()));
                     }
+
+                    if (googleApiClient.isConnecting() || googleApiClient.isConnected()) {
+                        googleApiClient.disconnect();
+                    }
+                    emitter.onComplete();
                 });
     }
 
